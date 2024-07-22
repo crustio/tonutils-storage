@@ -3,6 +3,7 @@ module github.com/xssnick/tonutils-storage
 go 1.19
 
 require (
+	github.com/kevinms/leakybucket-go v0.0.0-20200115003610-082473db97ca
 	github.com/pterm/pterm v0.12.59
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/xssnick/tonutils-go v1.9.5
@@ -15,7 +16,6 @@ require (
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/gookit/color v1.5.3 // indirect
-	github.com/kevinms/leakybucket-go v0.0.0-20200115003610-082473db97ca // indirect
 	github.com/lithammer/fuzzysearch v1.1.5 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20220328075252-7dd334e3daae // indirect

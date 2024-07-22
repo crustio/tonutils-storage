@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  tonutils-storage:
+    container_name: tonutils-storage
+    image: tonutils-storage
+    ports:
+      - 8192:8192
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "./tonutils-storage --api 127.0.0.1:8192"
