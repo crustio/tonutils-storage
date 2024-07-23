@@ -44,5 +44,5 @@ jobs:
           build-args: |
             ver=${{ steps.generate_build_arg_ver.outputs.ver }}
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/tonutils-storage:${{ steps.extract_tag.outputs.tag }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/tonutils-storage:latest
+            crustio/tonutils-storage:${{ steps.extract_tag.outputs.tag }}
+            crustio/tonutils-storage:latest
