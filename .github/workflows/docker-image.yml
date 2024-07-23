@@ -15,7 +15,7 @@ jobs:
 
       - name: Generate BuildArg ver
         id: generate_build_arg_ver
-        run: echo "git log -1 --pretty=format:"%h-%as""
+        run: echo "::set-output name=ver::$(git log -1 --pretty=format:"%h-%as")"
 
       - name: Extract Tag
         id: extract_tag
@@ -42,7 +42,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            ver=${{ steps.generate_build_arg_ver.outputs.result }}
+            ver=${{ steps.generate_build_arg_ver.outputs.ver }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/tonutils-storage:${{ steps.extract_tag.outputs.tag }}
             ${{ secrets.DOCKERHUB_USERNAME }}/tonutils-storage:latest
