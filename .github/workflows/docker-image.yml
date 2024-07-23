@@ -1,10 +1,9 @@
 name: build docker image
 # Controls when the action will run.
 on:
-  tags:
-    - 'v*.*.*'
-  release:
-    types: [created] # build and push when create a release
+  push:
+    tags:
+      - 'v*.*.*' ## on tag v*.*.*, build and push to dockerhub
 
 jobs:
   buildx:
