@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*' ## on tag v*.*.*, build and push to dockerhub
+  workflow_dispatch:
 
 jobs:
   buildx:
