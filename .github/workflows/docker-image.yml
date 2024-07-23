@@ -8,7 +8,7 @@ on:
 
 jobs:
   buildx:
-    if: startsWith(github.ref, 'refs/tags/v') && contains(github.ref, 'v') && github.event_name == 'push'
+    # if: startsWith(github.ref, 'refs/tags/v') && contains(github.ref, 'v') && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
