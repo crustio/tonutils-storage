@@ -9,4 +9,4 @@ services:
     command:
       - "/bin/sh"
       - "-c"
-      - "./tonutils-storage --api 127.0.0.1:8192"
+      - "./tonutils-storage --api 0.0.0.0:8192 --daemon"
