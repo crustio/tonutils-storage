@@ -6,6 +6,8 @@ services:
     image: tonutils-storage
     ports:
       - 8192:8192
+      - "17555:17555/udp"
+      - "18889:18889"
     command:
       - "/bin/sh"
       - "-c"
