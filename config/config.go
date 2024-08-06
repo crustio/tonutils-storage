@@ -5,12 +5,13 @@ import (
 	"crypto/ed25519"
 	"encoding/json"
 	"errors"
-	"github.com/pterm/pterm"
-	"github.com/xssnick/tonutils-storage/db"
 	"log"
 	"net"
 	"os"
 	"time"
+
+	"github.com/pterm/pterm"
+	"github.com/xssnick/tonutils-storage/db"
 )
 
 func checkIPAddress(ip string) string {
@@ -118,6 +119,7 @@ func LoadConfig(dir string) (*db.Config, error) {
 
 		cfg := &db.Config{
 			Key:           priv,
+			PubKey: 	priv.Public(),
 			ListenAddr:    "0.0.0.0:17555",
 			ExternalIP:    "",
 			DownloadsPath: "./downloads/",
@@ -142,6 +144,10 @@ func LoadConfig(dir string) (*db.Config, error) {
 
 		var cfg db.Config
 		err = json.Unmarshal(data, &cfg)
+		if(cfg.PubKey == nil){
+			cfg.PubKey = cfg.Key.Public()
+			err = SaveConfig(&cfg, dir)
+		}
 		if err != nil {
 			return nil, err
 		}

@@ -8,19 +8,21 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
+	"sort"
+	"sync"
+	"time"
+
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/util"
 	"github.com/xssnick/tonutils-go/adnl"
 	"github.com/xssnick/tonutils-go/tl"
 	"github.com/xssnick/tonutils-storage/storage"
-	"os"
-	"sort"
-	"sync"
-	"time"
 )
 
 type Config struct {
 	Key           ed25519.PrivateKey
+	PubKey		  any
 	ListenAddr    string
 	ExternalIP    string
 	DownloadsPath string
