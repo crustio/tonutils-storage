@@ -22,10 +22,11 @@ import (
 
 type Config struct {
 	Key           ed25519.PrivateKey
-	PubKey		  any
+	PubKey		  ed25519.PublicKey
 	ListenAddr    string
 	ExternalIP    string
 	DownloadsPath string
+	Signature	  []byte
 }
 
 type Event int

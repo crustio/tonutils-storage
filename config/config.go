@@ -11,6 +11,10 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
+	"github.com/xssnick/tonutils-go/adnl"
+	"github.com/xssnick/tonutils-go/adnl/address"
+	"github.com/xssnick/tonutils-go/adnl/dht"
+	"github.com/xssnick/tonutils-go/tl"
 	"github.com/xssnick/tonutils-storage/db"
 )
 
@@ -98,6 +102,37 @@ func checkCanSeed() (string, bool) {
 	return ip, ok
 }
 
+func genSaveSignature(cfg *db.Config, dir string) {
+	if(cfg.Signature != nil) {
+		return
+	}
+	ip := net.ParseIP(cfg.ExternalIP).To4();
+	var node = dht.Node {
+		ID: adnl.PublicKeyED25519 {
+			Key: cfg.PubKey,
+		},
+		AddrList: &address.List {
+			Addresses: []*address.UDP { 
+				{IP: ip, Port: 17555},
+			},
+			Version:    0 ,
+			ReinitDate : 0,
+			Priority   : 0,
+			ExpireAt   : 0,
+		},
+		Version: -1,
+	}
+	node.Signature = nil;
+	msg,error := tl.Serialize(node, true);
+	if(error != nil){
+		return
+	}
+	signature := ed25519.Sign(cfg.Key, msg);
+	cfg.Signature = signature;
+	node.Signature = signature;
+	SaveConfig(cfg, dir)
+}
+
 func LoadConfig(dir string) (*db.Config, error) {
 	_, err := os.Stat(dir)
 	if err != nil {
@@ -112,14 +147,13 @@ func LoadConfig(dir string) (*db.Config, error) {
 	path := dir + "/config.json"
 	_, err = os.Stat(path)
 	if os.IsNotExist(err) {
-		_, priv, err := ed25519.GenerateKey(nil)
+		pub, priv, err := ed25519.GenerateKey(nil)
 		if err != nil {
 			return nil, err
 		}
-
 		cfg := &db.Config{
 			Key:           priv,
-			PubKey: 	priv.Public(),
+			PubKey: 	   pub,
 			ListenAddr:    "0.0.0.0:17555",
 			ExternalIP:    "",
 			DownloadsPath: "./downloads/",
@@ -134,7 +168,6 @@ func LoadConfig(dir string) (*db.Config, error) {
 		if err != nil {
 			return nil, err
 		}
-
 		return cfg, nil
 	} else if err == nil {
 		data, err := os.ReadFile(path)
@@ -145,12 +178,13 @@ func LoadConfig(dir string) (*db.Config, error) {
 		var cfg db.Config
 		err = json.Unmarshal(data, &cfg)
 		if(cfg.PubKey == nil){
-			cfg.PubKey = cfg.Key.Public()
+			cfg.PubKey = cfg.Key.Public().(ed25519.PublicKey)
 			err = SaveConfig(&cfg, dir)
 		}
 		if err != nil {
 			return nil, err
 		}
+		genSaveSignature(&cfg, dir)
 		return &cfg, nil
 	}
 
